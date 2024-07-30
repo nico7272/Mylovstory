@@ -1,0 +1,416 @@
+html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyLoveStory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9e7e7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ffb6c1; 
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+            background-color: #ffb6c1; 
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            background-color: #f08080; 
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        textarea {
+            width: calc(100% - 50px);
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #ffb6c1; 
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        button {
+            background-color: #ffb6c1; 
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #f08080; 
+        }
+
+        #inicio p {
+            font-size: 18px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #inicio .contenido-inicio {
+            text-align: center;
+        }
+
+        #inicio img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        #listaHistorias {
+            margin-top: 20px;
+        }
+
+        #galeriaFotos {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .foto-container {
+            position: relative;
+            margin: 10px;
+            border-radius: 10px;
+            border: 2px solid #ffb6c1; 
+            display: inline-block;
+            background-color: white;
+            padding: 10px;
+        }
+
+        .foto-container img {
+            max-width: 200px;
+            border-radius: 10px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .foto-container textarea {
+            width: calc(100% - 50px);
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            resize: none;
+        }
+
+        .color-picker {
+            display: none;
+        }
+
+        .color-button {
+            background-color: #ffb6c1; 
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .color-button:hover {
+            background-color: #f08080; 
+        }
+
+        .eliminar-foto {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            color: #f00;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .eliminar-foto:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MyLoveStory</h1>
+       
+        <nav>
+            <ul>
+                <li><a href="#" onclick="openTab(event, 'inicio')" class="active">Inicio</a></li>
+                <li><a href="#" onclick="openTab(event, 'nuestraHistoria')">Nuestra Historia</a></li>
+                <li><a href="#" onclick="openTab(event, 'galeria')">Galería</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="inicio" class="tab-content active">
+            <div class="contenido-inicio">
+           
+                <p>Si en algún momento ya no estás conmigo, espero aspires a cosas como estas con otra persona y no esperes menos.</p>
+                          
+                <button onclick="openTab(event, 'nuestraHistoria')">Ver</button>
+                <img src="C:\Users\alfon\Desktop\MyLoveStory\Minecraft.jpeg" alt="Imagen de Inicio">
+            </div>
+        </section>
+        <section id="nuestraHistoria" class="tab-content">
+            <h2>Nuestra Historia</h2>
+            <textarea id="escribirHistoria" placeholder="Escribe tu historia aquí..."></textarea>
+            <button onclick="guardarHistoria()">Guardar Historia</button>
+            <div id="listaHistorias"></div>
+        </section>
+        <section id="galeria" class="tab-content">
+            <h2>Galería</h2>
+            <input type="file" id="subirFoto" accept="image/*">
+            <div id="galeriaFotos"></div>
+        </section>
+    </main>
+    <script>
+        function openTab(event, tabId) {
+            var tabcontent = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+
+            var tablinks = document.getElementsByTagName("a");
+            for (var i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            document.getElementById(tabId).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+
+        function guardarHistoria() {
+    const textarea = document.getElementById('escribirHistoria');
+    const listaHistorias = document.getElementById('listaHistorias');
+
+
+    const historiasGuardadas = JSON.parse(localStorage.getItem('historias')) || [];
+    historiasGuardadas.push(textarea.value);
+    localStorage.setItem('historias', JSON.stringify(historiasGuardadas));
+
+
+    mostrarHistorias();
+    textarea.value = ''; 
+}
+
+function mostrarHistorias() {
+    const listaHistorias = document.getElementById('listaHistorias');
+    listaHistorias.innerHTML = '';
+
+    const historiasGuardadas = JSON.parse(localStorage.getItem('historias')) || [];
+    historiasGuardadas.forEach((historia, index) => {
+        const historiaContainer = document.createElement('div');
+        historiaContainer.style.border = '1px solid #ffb6c1'; 
+        historiaContainer.style.margin = '10px 0';
+        historiaContainer.style.padding = '10px';
+        historiaContainer.style.borderRadius = '5px';
+        historiaContainer.style.backgroundColor = '#fff';
+        historiaContainer.style.position = 'relative';
+
+        const historiaTexto = document.createElement('p');
+        historiaTexto.textContent = historia;
+        historiaContainer.appendChild(historiaTexto);
+
+        const botonEliminar = document.createElement('button');
+        botonEliminar.textContent = 'Eliminar';
+        botonEliminar.style.position = 'absolute';
+        botonEliminar.style.top = '10px';
+        botonEliminar.style.right = '10px';
+        botonEliminar.style.backgroundColor = '#ffb6c1'; 
+        botonEliminar.style.color = 'white';
+        botonEliminar.style.border = 'none';
+        botonEliminar.style.padding = '5px 10px';
+        botonEliminar.style.borderRadius = '5px';
+        botonEliminar.style.cursor = 'pointer';
+        botonEliminar.onclick = function() {
+            eliminarHistoria(index);
+        };
+        historiaContainer.appendChild(botonEliminar);
+
+        listaHistorias.appendChild(historiaContainer);
+    });
+}
+
+function eliminarHistoria(index) {
+    let historiasGuardadas = JSON.parse(localStorage.getItem('historias')) || [];
+    historiasGuardadas.splice(index, 1);
+    localStorage.setItem('historias', JSON.stringify(historiasGuardadas));
+    mostrarHistorias(); 
+}
+        document.getElementById('subirFoto').addEventListener('change', function() {
+            const galeriaFotos = document.getElementById('galeriaFotos');
+            const files = this.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const fotoContainer = document.createElement('div');
+                    fotoContainer.classList.add('foto-container');
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    fotoContainer.appendChild(img);
+
+                    const textarea = document.createElement('textarea');
+                    textarea.placeholder = 'Agrega un comentario o título...';
+                    textarea.oninput = function() {
+                        guardarFotos();
+                    };
+                    fotoContainer.appendChild(textarea);
+
+                    const colorButton = document.createElement('button');
+                    colorButton.textContent = 'Cambiar Color';
+                    colorButton.classList.add('color-button');
+                    colorButton.onclick = function() {
+                        const colorPicker = document.createElement('input');
+                        colorPicker.type = 'color';
+                        colorPicker.value = '#000000';
+                        colorPicker.style.position = 'absolute';
+                        colorPicker.style.left = '-9999px';
+                        colorPicker.classList.add('color-picker');
+                        colorPicker.oninput = function() {
+                            textarea.style.color = colorPicker.value;
+                        };
+                        document.body.appendChild(colorPicker);
+                        colorPicker.click();
+                    };
+                    fotoContainer.appendChild(colorButton);
+
+                    const botonEliminar = document.createElement('button');
+                    botonEliminar.textContent = 'X';
+                    botonEliminar.classList.add('eliminar-foto');
+                    botonEliminar.onclick = function() {
+                        eliminarFoto(fotoContainer, e.target.result);
+                    };
+
+                    fotoContainer.appendChild(botonEliminar);
+                    galeriaFotos.appendChild(fotoContainer);
+
+                    guardarFotos();
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function cargarFotos() {
+            const fotosGuardadas = JSON.parse(localStorage.getItem('fotos')) || [];
+            const galeriaFotos = document.getElementById('galeriaFotos');
+
+            fotosGuardadas.forEach(foto => {
+                const fotoContainer = document.createElement('div');
+                fotoContainer.classList.add('foto-container');
+
+                const img = document.createElement('img');
+                img.src = foto.src;
+                fotoContainer.appendChild(img);
+
+                const textarea = document.createElement('textarea');
+                textarea.value = foto.comentario;
+                textarea.placeholder = 'Agrega un comentario o título...';
+                textarea.style.color = foto.color || '#000000';
+                textarea.oninput = function() {
+                    guardarFotos();
+                };
+                fotoContainer.appendChild(textarea);
+
+                const colorButton = document.createElement('button');
+                colorButton.textContent = 'Cambiar Color';
+                colorButton.classList.add('color-button');
+                colorButton.onclick = function() {
+                    const colorPicker = document.createElement('input');
+                    colorPicker.type = 'color';
+                    colorPicker.value = foto.color || '#000000';
+                    colorPicker.style.position = 'absolute';
+                    colorPicker.style.left = '-9999px';
+                    colorPicker.classList.add('color-picker');
+                    colorPicker.oninput = function() {
+                        textarea.style.color = colorPicker.value;
+                        foto.color = colorPicker.value;
+                        guardarFotos();
+                    };
+                    document.body.appendChild(colorPicker);
+                    colorPicker.click();
+                };
+                fotoContainer.appendChild(colorButton);
+
+                const botonEliminar = document.createElement('button');
+                botonEliminar.textContent = 'X';
+                botonEliminar.classList.add('eliminar-foto');
+                botonEliminar.onclick = function() {
+                    eliminarFoto(fotoContainer, foto.src);
+                };
+
+                fotoContainer.appendChild(botonEliminar);
+                galeriaFotos.appendChild(fotoContainer);
+            });
+        }
+
+        function guardarFotos() {
+            const galeriaFotos = document.getElementById('galeriaFotos');
+            const fotos = galeriaFotos.getElementsByClassName('foto-container');
+            const fotosArray = Array.from(fotos).map(container => {
+                const img = container.getElementsByTagName('img')[0];
+                const textarea = container.getElementsByTagName('textarea')[0];
+                const colorButton = container.getElementsByClassName('color-button')[0];
+                return { src: img.src, comentario: textarea.value, color: textarea.style.color || '#000000' };
+            });
+            localStorage.setItem('fotos', JSON.stringify(fotosArray));
+        }
+
+        function eliminarFoto(element, src) {
+            element.remove();
+            const fotosGuardadas = JSON.parse(localStorage.getItem('fotos')) || [];
+            const fotosActualizadas = fotosGuardadas.filter(foto => foto.src !== src);
+            localStorage.setItem('fotos', JSON.stringify(fotosActualizadas));
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarFotos);
+        document.addEventListener('DOMContentLoaded', mostrarHistorias);
+    </script>
+ 
+</body>
+</html>
